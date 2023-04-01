@@ -1,6 +1,6 @@
 import 'package:validators/validators.dart';
 
-Function validateId() {
+Function validateUsername() {
   return (value) {
     if (value.isEmpty) {
       return "공백을 채우세요";
@@ -16,7 +16,7 @@ Function validateId() {
   };
 }
 
-Function validatePw() {
+Function validatePassword() {
   return (value) {
     if (value.isEmpty) {
       return "공백을 채우세요";

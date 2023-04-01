@@ -3,12 +3,15 @@ import 'package:get/get.dart';
 import 'package:robot/controller/user_controller.dart';
 import 'package:robot/view/components/custom_elevated_button.dart';
 import 'package:robot/view/components/custom_text_form_field.dart';
+import 'package:robot/view/pages/app/home_page.dart';
 import 'package:robot/view/pages/user/join_page.dart';
 import 'package:robot/util/validator_util.dart';
 
 class LoginPage extends StatelessWidget {
   final _formkey = GlobalKey<FormState>();
-  UserController u = Get.put(UserController());
+  final UserController u = Get.put(UserController());
+  final _username = TextEditingController();
+  final _password = TextEditingController();
 
   LoginPage({super.key});
 
@@ -22,9 +25,9 @@ class LoginPage extends StatelessWidget {
             Container(
               alignment: Alignment.center,
               height: 200,
-              child: const Text(
-                "도서관 로그인",
-                style: TextStyle(
+              child: Text(
+                "도서관 로그인 ${u.isLogin}",
+                style: const TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
@@ -43,25 +46,33 @@ class LoginPage extends StatelessWidget {
       child: Column(
         children: [
           CustomTextFormField(
+            controller: _username,
             hint: "ID",
-            funValidator: validateId(),
+            funValidator: validateUsername(),
           ),
           CustomTextFormField(
+            controller: _password,
             hint: "pw",
-            funValidator: validatePw(),
+            funValidator: validatePassword(),
           ),
           CustomElevatedButton(
             text: "로그인",
-            funPageRoute: () {
+            funPageRoute: () async {
               if (_formkey.currentState!.validate()) {
-                //Get.to(const HomePage());
-                u.login("username", "password");
+                //trim() 공백제거 해줌
+                String token =
+                    await u.login(_username.text.trim(), _password.text.trim());
+                if (token != "-1") {
+                  Get.to(() => const HomePage());
+                } else {
+                  Get.snackbar("로그인 실패", "ID, PW 체크하세요");
+                }
               }
             },
           ),
           TextButton(
             onPressed: () {
-              Get.to(JoinPage());
+              Get.to(() => JoinPage());
             },
             child: const Text("회원가입"),
           ),

@@ -5,17 +5,22 @@ import 'package:flutter/material.dart';
 class CustomTextFormField extends StatelessWidget {
   final String hint;
   final funValidator;
-  final String? value; //널일수도 아닐수도
+  final String? value; //널일수도 아닐수도 있을 때 물음표
+  final controller;
 
   const CustomTextFormField(
-      {required this.hint, required this.funValidator, this.value});
+      {required this.hint,
+      required this.funValidator,
+      this.value,
+      this.controller});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: TextFormField(
-        initialValue: value ?? "",
+        controller: controller,
+        initialValue: value,
         validator: funValidator,
         obscureText: hint == "pw" ? true : false,
         decoration: InputDecoration(

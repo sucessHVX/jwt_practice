@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:robot/controller/post_controller.dart';
+import 'package:robot/controller/user_controller.dart';
 import 'package:robot/view/pages/app/detail_page.dart';
 import 'package:robot/view/pages/app/write_page.dart';
 import 'package:robot/view/pages/user/login_page.dart';
@@ -12,11 +14,19 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //put은 없으면 만들고, 이미 만들어뒀으면 찾기
+    UserController u = Get.find();
+    PostController p = Get.put(PostController());
+    p.findAll();
+
     return Scaffold(
       drawer: _navigation(context),
-      appBar: AppBar(),
+      appBar: AppBar(
+        //Obx가 변경까지 관찰해주는 함수
+        title: Obx(() => Text("${u.isLogin}")),
+      ),
       body: ListView.separated(
-        itemCount: 3,
+        itemCount: 5,
         itemBuilder: (context, index) {
           return ListTile(
             onTap: () {
@@ -35,6 +45,7 @@ class HomePage extends StatelessWidget {
 }
 
 Widget _navigation(BuildContext context) {
+  UserController u = Get.find(); //다시 찾기
   return Container(
     //메뉴
     width: getDrawerWidth(context),
@@ -60,7 +71,7 @@ Widget _navigation(BuildContext context) {
           const Divider(),
           TextButton(
             onPressed: () {
-              Get.to(const UserPage());
+              Get.to(() => const UserPage());
             },
             child: const Text(
               "회원정보",
@@ -74,7 +85,8 @@ Widget _navigation(BuildContext context) {
           const Divider(),
           TextButton(
             onPressed: () {
-              Get.to(LoginPage());
+              u.logout();
+              Get.to(() => LoginPage());
             },
             child: const Text(
               "로그아웃",

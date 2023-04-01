@@ -42,11 +42,11 @@ class JoinPage extends StatelessWidget {
         children: [
           CustomTextFormField(
             hint: "ID",
-            funValidator: validateId(),
+            funValidator: validateUsername(),
           ),
           CustomTextFormField(
             hint: "pw",
-            funValidator: validatePw(),
+            funValidator: validatePassword(),
           ),
           CustomTextFormField(
             hint: "E-mail",
@@ -56,13 +56,13 @@ class JoinPage extends StatelessWidget {
             text: "회원가입",
             funPageRoute: () {
               if (_formkey.currentState!.validate()) {
-                Get.to(LoginPage());
+                Get.to(() => LoginPage());
               }
             },
           ),
           TextButton(
             onPressed: () {
-              Get.to(LoginPage());
+              Get.to(() => LoginPage());
             },
             child: const Text("로그인 페이지로 이동"),
           ),
