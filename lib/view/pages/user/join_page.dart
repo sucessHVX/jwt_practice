@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:robot/controller/user_controller.dart';
 import 'package:robot/view/components/custom_elevated_button.dart';
 import 'package:robot/view/components/custom_text_form_field.dart';
 import 'package:robot/view/pages/user/login_page.dart';
@@ -7,6 +8,9 @@ import 'package:robot/util/validator_util.dart';
 
 class JoinPage extends StatelessWidget {
   final _formkey = GlobalKey<FormState>();
+  final _id = TextEditingController();
+  final _pw = TextEditingController();
+  final _email = TextEditingController();
 
   JoinPage({super.key});
 
@@ -41,21 +45,26 @@ class JoinPage extends StatelessWidget {
       child: Column(
         children: [
           CustomTextFormField(
+            controller: _id,
             hint: "ID",
             funValidator: validateUsername(),
           ),
           CustomTextFormField(
+            controller: _pw,
             hint: "pw",
             funValidator: validatePassword(),
           ),
           CustomTextFormField(
+            controller: _email,
             hint: "E-mail",
             funValidator: validateEmail(),
           ),
           CustomElevatedButton(
             text: "회원가입",
-            funPageRoute: () {
+            funPageRoute: () async {
               if (_formkey.currentState!.validate()) {
+                await Get.find<UserController>()
+                    .join(_id.text, _pw.text, _email.text);
                 Get.to(() => LoginPage());
               }
             },

@@ -1,5 +1,6 @@
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:robot/controller/dto/cm_resp_dto.dart';
+import 'package:robot/controller/dto/save_or_update_req_dto.dart';
 import 'package:robot/domain/post/post.dart';
 import 'package:robot/domain/post/post_provider.dart';
 
@@ -7,6 +8,37 @@ import 'package:robot/domain/post/post_provider.dart';
 class PostRepository {
   // _ 언더바를 변수 앞에 쓰면 private됨
   final PostProvider _postProvider = PostProvider();
+
+  Future<Post> save(String title, String content) async {
+    SaveOrUpdateReqDto saveReqDto = SaveOrUpdateReqDto(title, content);
+    //.toJson을 통해 map으로 변경
+    Response response = await _postProvider.save(saveReqDto.toJson());
+    dynamic body = response.body;
+    CMRespDto cmRespDto = CMRespDto.fromJson(body);
+
+    if (cmRespDto.code == 1) {
+      Post post = Post.fromJson(cmRespDto.data);
+      return post;
+    } else {
+      return Post();
+    }
+  }
+
+  Future<Post> updateById(int id, String title, String content) async {
+    SaveOrUpdateReqDto UpdateReqDto = SaveOrUpdateReqDto(title, content);
+    //.toJson을 통해 map으로 변경
+    Response response =
+        await _postProvider.updateById(id, UpdateReqDto.toJson());
+    dynamic body = response.body;
+    CMRespDto cmRespDto = CMRespDto.fromJson(body);
+
+    if (cmRespDto.code == 1) {
+      Post post = Post.fromJson(cmRespDto.data);
+      return post;
+    } else {
+      return Post();
+    }
+  }
 
   Future<int> deleteById(int id) async {
     Response response = await _postProvider.deleteById(id);

@@ -27,6 +27,7 @@ class DetailPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
+                //이 데이터는 컨트롤러에서 관리
                 "${p.post.value.title}",
                 style:
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
@@ -39,8 +40,8 @@ class DetailPage extends StatelessWidget {
                         ElevatedButton(
                           onPressed: () async {
                             await p.deleteById(p.post.value.id!);
-                            Get.off(() =>
-                                const HomePage()); //스택에서 삭제하고 돌아가기 나중에 상태관리로 갱신
+                            Get.off(
+                                () => HomePage()); //스택에서 삭제하고 돌아가기 나중에 상태관리로 갱신
                           },
                           child: const Text("삭제"),
                         ),

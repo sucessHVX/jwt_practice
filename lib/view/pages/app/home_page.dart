@@ -10,7 +10,9 @@ import 'package:robot/size.dart';
 import '../user/user_page.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
+
+  HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,21 +28,27 @@ class HomePage extends StatelessWidget {
           title: Obx(() => Text("${u.isLogin}")),
         ),
         body: Obx(
-          () => ListView.separated(
-            itemCount: p.posts.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                onTap: () async {
-                  await p.findById(p.posts[index].id!); //!가 붙으면 null이 절대 아닌 것
-                  Get.to(DetailPage(p.posts[index].id), arguments: "이걸로 넘김");
-                },
-                title: Text("${p.posts[index].title}"),
-                leading: Text("${p.posts[index].id}"),
-              );
+          () => RefreshIndicator(
+            key: refreshKey,
+            onRefresh: () async {
+              await p.findAll();
             },
-            separatorBuilder: (context, index) {
-              return const Divider();
-            },
+            child: ListView.separated(
+              itemCount: p.posts.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  onTap: () async {
+                    await p.findById(p.posts[index].id!); //!가 붙으면 null이 절대 아닌 것
+                    Get.to(DetailPage(p.posts[index].id), arguments: "이걸로 넘김");
+                  },
+                  title: Text("${p.posts[index].title}"),
+                  leading: Text("${p.posts[index].id}"),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return const Divider();
+              },
+            ),
           ),
         ));
   }
@@ -59,7 +67,8 @@ Widget _navigation(BuildContext context) {
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           TextButton(
             onPressed: () {
-              Get.to(WritePage());
+              Navigator.pop(context); //뒤로 돌아왔을 때 메뉴창 제거
+              Get.to(() => WritePage());
             },
             child: const Text(
               "글쓰기",
@@ -73,6 +82,7 @@ Widget _navigation(BuildContext context) {
           const Divider(),
           TextButton(
             onPressed: () {
+              Navigator.pop(context);
               Get.to(() => const UserPage());
             },
             child: const Text(

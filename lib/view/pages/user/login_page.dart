@@ -63,7 +63,7 @@ class LoginPage extends StatelessWidget {
                 int result =
                     await u.login(_username.text.trim(), _password.text.trim());
                 if (result == 1) {
-                  Get.to(() => const HomePage());
+                  Get.to(() => HomePage());
                 } else {
                   Get.snackbar("로그인 실패", "ID, PW 확인하세요");
                 }

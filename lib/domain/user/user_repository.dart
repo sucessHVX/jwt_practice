@@ -1,5 +1,6 @@
 import 'package:get/get_connect/http/src/response/response.dart';
 import 'package:robot/controller/dto/cm_resp_dto.dart';
+import 'package:robot/controller/dto/join_req_dto.dart';
 import 'package:robot/controller/dto/login_req_dto.dart';
 import 'package:robot/domain/user/user.dart';
 import 'package:robot/domain/user/user_provider.dart';
@@ -26,12 +27,20 @@ class UserRepository {
     } else {
       return User();
     }
+  }
 
-    // if (headers["authorization"] == null) {
-    //   return "-1";
-    // } else {
-    //   String token = headers["authorization"];
-    //   return token; //스트링 타입으로 반환
-    // }
+  Future<User> join(String username, String password, String email) async {
+    JoinReqDto joinReqDto = JoinReqDto(username, password, email);
+    //.toJson을 통해 map으로 변경
+    Response response = await _userProvider.join(joinReqDto.toJson());
+    dynamic body = response.body;
+    CMRespDto cmRespDto = CMRespDto.fromJson(body);
+
+    if (cmRespDto.code == 1) {
+      User user = User.fromJson(cmRespDto.data);
+      return user;
+    } else {
+      return User();
+    }
   }
 }
