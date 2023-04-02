@@ -17,30 +17,32 @@ class HomePage extends StatelessWidget {
     //put은 없으면 만들고, 이미 만들어뒀으면 찾기
     UserController u = Get.find();
     PostController p = Get.put(PostController());
-    p.findAll();
+    //p.findAll();
 
     return Scaffold(
-      drawer: _navigation(context),
-      appBar: AppBar(
-        //Obx가 변경까지 관찰해주는 함수
-        title: Obx(() => Text("${u.isLogin}")),
-      ),
-      body: ListView.separated(
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return ListTile(
-            onTap: () {
-              Get.to(DetailPage(index), arguments: "이걸로 넘김");
+        drawer: _navigation(context),
+        appBar: AppBar(
+          //Obx가 변경까지 관찰해주는 함수
+          title: Obx(() => Text("${u.isLogin}")),
+        ),
+        body: Obx(
+          () => ListView.separated(
+            itemCount: p.posts.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                onTap: () {
+                  p.findById(p.posts[index].id!); //!가 붙으면 null이 절대 아닌 것
+                  Get.to(DetailPage(p.posts[index].id), arguments: "이걸로 넘김");
+                },
+                title: Text("${p.posts[index].title}"),
+                leading: Text("${p.posts[index].id}"),
+              );
             },
-            title: const Text("제목1"),
-            leading: const Text("1"),
-          );
-        },
-        separatorBuilder: (context, index) {
-          return const Divider();
-        },
-      ),
-    );
+            separatorBuilder: (context, index) {
+              return const Divider();
+            },
+          ),
+        ));
   }
 }
 

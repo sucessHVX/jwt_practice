@@ -8,4 +8,6 @@ class PostProvider extends GetConnect {
   //Map타입으로 전송을 해줘야 함 post방식으로
   Future<Response> findAll() =>
       get("$host/post", headers: {"Authorization": jwtToken ?? ""});
+  Future<Response> findById(int id) =>
+      get("$host/post/$id", headers: {"Authorization": jwtToken ?? ""});
 }
