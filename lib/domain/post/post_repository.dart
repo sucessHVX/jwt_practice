@@ -8,6 +8,14 @@ class PostRepository {
   // _ 언더바를 변수 앞에 쓰면 private됨
   final PostProvider _postProvider = PostProvider();
 
+  Future<int> deleteById(int id) async {
+    Response response = await _postProvider.deleteById(id);
+    dynamic body = response.body;
+    CMRespDto cmRespDto = CMRespDto.fromJson(body);
+
+    return cmRespDto.code!; //!로 널처리
+  }
+
   Future<Post> findById(int id) async {
     Response response = await _postProvider.findById(id);
     dynamic body = response.body;

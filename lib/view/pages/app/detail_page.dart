@@ -32,24 +32,28 @@ class DetailPage extends StatelessWidget {
                     const TextStyle(fontWeight: FontWeight.bold, fontSize: 35),
               ),
               const Divider(),
-              Row(
-                //가로정렬
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.off(const HomePage()); //스택에서 삭제하고 돌아가기 나중에 상태관리로 갱신
-                    },
-                    child: const Text("삭제"),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.to(() => UpdatePage());
-                    },
-                    child: const Text("수정"),
-                  ),
-                ],
-              ),
+              u.principal.value.id == p.post.value.user!.id
+                  ? Row(
+                      //가로정렬
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            await p.deleteById(p.post.value.id!);
+                            Get.off(() =>
+                                const HomePage()); //스택에서 삭제하고 돌아가기 나중에 상태관리로 갱신
+                          },
+                          child: const Text("삭제"),
+                        ),
+                        const SizedBox(height: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            Get.to(() => UpdatePage());
+                          },
+                          child: const Text("수정"),
+                        ),
+                      ],
+                    )
+                  : const SizedBox(),
               Expanded(
                 //expanded로 높이를 줘서 제한 없앰
                 child: SingleChildScrollView(

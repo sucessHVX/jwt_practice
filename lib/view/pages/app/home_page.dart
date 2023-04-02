@@ -30,8 +30,8 @@ class HomePage extends StatelessWidget {
             itemCount: p.posts.length,
             itemBuilder: (context, index) {
               return ListTile(
-                onTap: () {
-                  p.findById(p.posts[index].id!); //!가 붙으면 null이 절대 아닌 것
+                onTap: () async {
+                  await p.findById(p.posts[index].id!); //!가 붙으면 null이 절대 아닌 것
                   Get.to(DetailPage(p.posts[index].id), arguments: "이걸로 넘김");
                 },
                 title: Text("${p.posts[index].title}"),
